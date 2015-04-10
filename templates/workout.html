@@ -1,0 +1,14 @@
+<ion-view view-title="{{ exercise.name }}" ng-init="loadWorkout()">
+	<ion-content>
+  	<div class="exercise_graph" id="linechart">
+		
+		</div>
+		<div class="workouts_list">
+			<ion-list>
+				<ion-item ng-repeat="workout in exercise.workouts">
+					{{ workout.date }}
+				</ion-item>
+			</ion-list>
+		</div>
+  </ion-content>
+</ion-view>

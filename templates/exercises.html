@@ -1,0 +1,12 @@
+<ion-view view-title="My Exercises" ng-init="getExercises()">
+  <ion-content>
+  	<ion-list>
+			<ion-item ng-repeat="exercise in exercises" ng-href="/#/app/workouts/{{$index}}">
+				{{ exercise.name }}
+				<p style="float: right;">
+					{{ exercise.category }}
+				</p>
+			</ion-item>
+		</ion-list>
+  </ion-content>
+</ion-view>
