@@ -100,6 +100,7 @@ angular.module('starter.controllers', [])
 	} // end loadWorkout method
 	// modal control methods
 	$scope.closeWorkout = function() {
+		console.log($scope.exercise.sets);
     $scope.modal.hide();
   };
   // Open the workout modal

@@ -5,7 +5,7 @@
 		</div>
 		<div class="workouts_list">
 			<ion-list>
-				<ion-item ng-repeat="workout in exercise.workouts">
+				<ion-item ng-repeat="workout in exercise.workouts" ng-click="showWorkout()">
 					{{ workout.date }}
 				</ion-item>
 			</ion-list>

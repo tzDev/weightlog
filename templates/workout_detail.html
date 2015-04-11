@@ -1,11 +1,14 @@
 <ion-modal-view>
   <ion-header-bar>
-    <h1 class="title">Workout Detail</h1>
+    <h1 class="title">{{ exercise.name }} {{ exercise.created }}</h1>
     <div class="buttons">
       <button class="button button-clear" ng-click="closeWorkout()">Close</button>
     </div>
   </ion-header-bar>
   <ion-content>
-    
-  </ion-content>
+		<h2>Set list</h2>
+		<div class="row" ng-repeat="set in exercise.sets">
+			{{ set.weight }}
+		</div>
+	</ion-content>
 </ion-modal-view>
