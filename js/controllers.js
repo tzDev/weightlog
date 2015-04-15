@@ -15,6 +15,11 @@ angular.module('starter.controllers', [])
 				units: "pounds",
 				reps: 8,
 				duration: "0:35"
+			}, {
+				weight: 45, 
+				units: "pounds",
+				reps: 10,
+				duration: "0:41"	
 			}]
 		}]
 	}; // end exercise fixture
@@ -93,6 +98,7 @@ angular.module('starter.controllers', [])
     $scope.modal = modal;
   });
 	$scope.exercise = {};
+	$scope.workout = {};
 	$scope.loadWorkout = function() {
 		$scope.exercise = ExercisesService.exercises[$stateParams.workout_id];
 		console.log($scope.exercise);
@@ -100,11 +106,12 @@ angular.module('starter.controllers', [])
 	} // end loadWorkout method
 	// modal control methods
 	$scope.closeWorkout = function() {
-		console.log($scope.exercise.sets);
     $scope.modal.hide();
   };
   // Open the workout modal
-  $scope.showWorkout = function() {
+  $scope.showWorkout = function(w_id) {
+		// set the workout so the workout can get at it
+		$scope.workout = $scope.exercise.workouts[w_id];
     $scope.modal.show();
   };
 	

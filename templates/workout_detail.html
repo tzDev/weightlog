@@ -6,9 +6,22 @@
     </div>
   </ion-header-bar>
   <ion-content>
-		<h2>Set list</h2>
-		<div class="row" ng-repeat="set in exercise.sets">
-			{{ set.weight }}
-		</div>
+		<h2>Sets</h2>
+		<div class="row header"><!-- header row -->
+			<div class="col">Weight</div>
+			<div class="col">Reps</div>
+			<div class="col">Duration</div>
+		</div><!-- end header row, content repetition -->
+		<div class="row" ng-repeat="set in workout.sets">
+			<div class="col">
+				{{ set.weight }} {{ set.units }}
+			</div>
+			<div class="col">
+				{{ set.reps }}
+			</div>
+			<div class="col">
+				{{ set.duration }}
+			</div>
+		</div><!-- end repeating div row -->
 	</ion-content>
 </ion-modal-view>
