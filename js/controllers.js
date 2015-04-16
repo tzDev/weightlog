@@ -3,12 +3,25 @@ angular.module('starter.controllers', [])
 // we will need to define an exercise service
 .factory('ExercisesService', function() {
 	var exercises = new Array();
-
+	// we need fixtures
 	var ex = {
 		name: "Curls", 
 		created: "2015-04-02 18:50:12", 
 		category: "Free Weights",
 		workouts: [{
+			date: "2015-04-10 12:21:09",
+			sets: [{
+				weight: 55, 
+				units: "pounds",
+				reps: 12,
+				duration: "0:58"
+			}, {
+				weight: 50, 
+				units: "pounds",
+				reps: 8,
+				duration: "0:41"	
+			}]
+		}, {
 			date: "2015-04-02 18:56:18",
 			sets: [{
 				weight: 45, 
@@ -136,17 +149,52 @@ angular.module('starter.controllers', [])
 		
 		var data = {};
 		data.labels = new Array();
-		data.datasets = new Array();
+		data.datasets = [{
+			label: "Weight",
+			fillColor: "rgba(151,187,205,0.2)",
+			strokeColor: "rgba(151,187,205,1)",
+			pointColor: "rgba(151,187,205,1)",
+			pointStrokeColor: "#fff",
+			pointHighlightFill: "#fff",
+			pointHighlightStroke: "rgba(151,187,205,1)",
+			data: []
+		}, {
+			label: "Reps",
+			fillColor: "rgba(255,187,205,0.2)",
+			strokeColor: "rgba(255,187,205,1)",
+			pointColor: "rgba(255,187,205,1)",
+			pointStrokeColor: "#fff",
+			pointHighlightFill: "#fff",
+			pointHighlightStroke: "rgba(151,187,205,1)",
+			data: []							
+		}]
 		//console.log(data);
-		for (var i = 0; i < $scope.exercise.workouts; i++) {
-			console.log($scope.exercises.workouts[i]);	
-		}
+		for (workout of $scope.exercise.workouts) {
+			// first we need to set the label list name
+			console.log(workout);
+			data.labels.push(workout.date);
+			// dataset 0 is weight, 1 is reps
+			// for both sets we will want an average for that workout
+			var weight = 0;
+			var reps = 0;
+			for (set of workout.sets) {
+				weight += set.weight;
+				reps += set.reps;
+			}
+			weight = weight / workout.sets.length;
+			reps = reps / workout.sets.length;
+			// now we can append it to the dataset
+			data.datasets[0].data.push(weight);
+			data.datasets[1].data.push(reps);
+		} // end workout iteration
+		console.log('data obj')
+		console.log(data);
 		// we want a responsive chart
 		Chart.defaults.global.responsive = true;
 		// get chart el
 		var ctx = document.getElementById("linechart").getContext("2d");
 		// print it
-		var chart = new Chart(ctx).Line(test_data, {});
+		var chart = new Chart(ctx).Line(data, {});
 	}; // end buildGraph method
 	
 }) // end workout controller
