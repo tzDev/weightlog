@@ -84,14 +84,14 @@ angular.module('starter.controllers', [])
 
 }) // end Settings controller
 
-.controller('ExerciseCtrl', function($scope, $ionicModal, ExercisesService) {
+.controller('ExercisesCtrl', function($scope, $ionicModal, ExercisesService) {
 	$scope.exercises = {};
 	$scope.getExercises = function() {
 		$scope.exercises = ExercisesService.exercises;
 	}	// end getExercises function
 }) // end Exercise cotnroller
 
-.controller('WorkoutCtrl', function($scope, $ionicModal, $stateParams, ExercisesService) {
+.controller('ExerciseCtrl', function($scope, $ionicModal, $stateParams, ExercisesService) {
 	$ionicModal.fromTemplateUrl('templates/workout_detail.html', {
     scope: $scope
   }).then(function(modal) {
@@ -99,8 +99,8 @@ angular.module('starter.controllers', [])
   });
 	$scope.exercise = {};
 	$scope.workout = {};
-	$scope.loadWorkout = function() {
-		$scope.exercise = ExercisesService.exercises[$stateParams.workout_id];
+	$scope.loadExercise = function() {
+		$scope.exercise = ExercisesService.exercises[$stateParams.exercise_id];
 		console.log($scope.exercise);
 		$scope.buildGraph();
 	} // end loadWorkout method
@@ -115,7 +115,39 @@ angular.module('starter.controllers', [])
     $scope.modal.show();
   };
 	
-	
+	$scope.buildGraph = function() {
+		// we gonn make da graf
+		// build the dataset
+		var test_data = {
+		labels: ["January", "February", "March", "April", "May", "June", "July"],
+		datasets: [
+				{
+						label: "My dataset",
+						fillColor: "rgba(151,187,205,0.2)",
+						strokeColor: "rgba(151,187,205,1)",
+						pointColor: "rgba(151,187,205,1)",
+						pointStrokeColor: "#fff",
+						pointHighlightFill: "#fff",
+						pointHighlightStroke: "rgba(151,187,205,1)",
+						data: [28, 48, 40, 19, 86, 27, 90]
+				}
+		]
+		};
+		
+		var data = {};
+		data.labels = new Array();
+		data.datasets = new Array();
+		//console.log(data);
+		for (var i = 0; i < $scope.exercise.workouts; i++) {
+			console.log($scope.exercises.workouts[i]);	
+		}
+		// we want a responsive chart
+		Chart.defaults.global.responsive = true;
+		// get chart el
+		var ctx = document.getElementById("linechart").getContext("2d");
+		// print it
+		var chart = new Chart(ctx).Line(test_data, {});
+	}; // end buildGraph method
 	
 }) // end workout controller
 

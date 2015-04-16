@@ -44,7 +44,7 @@ angular.module('starter', ['ionic', 'starter.controllers'])
     views: {
       'menuContent': {
         templateUrl: "templates/exercises.html",
-				controller: 'ExerciseCtrl'
+				controller: 'ExercisesCtrl'
       }
     }
   })
@@ -59,12 +59,12 @@ angular.module('starter', ['ionic', 'starter.controllers'])
 		}
 	})
 	
-	.state('app.workouts', {
-		url: "/workouts/:workout_id",
+	.state('app.exercise', {
+		url: "/exercise/:exercise_id",
 		views: {
 			'menuContent': {
-				templateUrl: "templates/workout.html",
-				controller: 'WorkoutCtrl'
+				templateUrl: "templates/exercise.html",
+				controller: 'ExerciseCtrl'
 			}
 		}
 	})
