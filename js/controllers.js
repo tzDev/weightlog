@@ -114,7 +114,6 @@ angular.module('starter.controllers', [])
 	$scope.workout = {};
 	$scope.loadExercise = function() {
 		$scope.exercise = ExercisesService.exercises[$stateParams.exercise_id];
-		console.log($scope.exercise);
 		$scope.buildGraph();
 	} // end loadWorkout method
 	// modal control methods
