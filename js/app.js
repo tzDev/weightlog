@@ -79,6 +79,16 @@ angular.module('starter', ['ionic', 'starter.controllers'])
 		}
 	})
 	
+	.state('app.add-workout', {
+		url: "/workouts/add",
+		views: {
+			'menuContent': {
+				templateUrl: "templates/add_workout.html",
+				controller: 'WorkoutCtrl'
+			}
+		}
+	})
+	
 
 	;
   // if none of the above states are matched, use this as the fallback

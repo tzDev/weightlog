@@ -186,8 +186,15 @@ angular.module('starter.controllers', [])
 		var chart = new Chart(ctx).Line(data, {});
 	}; // end buildGraph method
 	
-}) // end workout controller
+}) // end exercise controller
 
+.controller('WorkoutCtrl', function($scope) {
+	$scope.buildSetRow = function() {
+		var container = document.getElementById('sets');
+		
+		
+	} // end buildSetRow method
+}) // end workout controller
 
 
 	

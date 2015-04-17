@@ -1,0 +1,29 @@
+<div id="workout" class="list card">
+	<div class="item item-divider">
+		Workout 
+	</div>
+  <label class="item item-input">
+    <span class="input-label">Date</span>
+    <input type="text" onclick="this.type='date';" />
+  </label>
+	
+	 <label class="item item-input">
+    <span class="input-label">Time</span>
+    <input type="text" />
+  </label>
+</div>
+
+<div id="sets" class="list card">
+	<div class="item item-divider">
+		Sets
+	</div>
+	<div ng-include src="'templates/_set_form.html'">
+		<!-- sets included here -->
+	</div>
+</div>
+
+<div class="row responsive-sm">
+	<div class="button button-balanced" class="col" style="margin: 0 5em;">
+		Save
+	</div>
+</div>

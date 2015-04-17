@@ -4,6 +4,13 @@
 		
 		</canvas>
 		<!-- graphing js -->
+		<div class="row">
+			<div class="col" style="text-align: right;">
+				<a href="/#/app/workouts/add">
+					<i class="icon ion-plus positive" style="font-size: 2em;"></i>
+				</a>
+			</div>
+		</div>
 		<div class="workouts_list">
 			<ion-list>
 				<ion-item ng-repeat="workout in exercise.workouts" ng-click="showWorkout({{ $index }})">
