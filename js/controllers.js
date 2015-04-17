@@ -131,22 +131,6 @@ angular.module('starter.controllers', [])
 	$scope.buildGraph = function() {
 		// we gonn make da graf
 		// build the dataset
-		var test_data = {
-		labels: ["January", "February", "March", "April", "May", "June", "July"],
-		datasets: [
-				{
-						label: "My dataset",
-						fillColor: "rgba(151,187,205,0.2)",
-						strokeColor: "rgba(151,187,205,1)",
-						pointColor: "rgba(151,187,205,1)",
-						pointStrokeColor: "#fff",
-						pointHighlightFill: "#fff",
-						pointHighlightStroke: "rgba(151,187,205,1)",
-						data: [28, 48, 40, 19, 86, 27, 90]
-				}
-		]
-		};
-		
 		var data = {};
 		data.labels = new Array();
 		data.datasets = [{
@@ -181,12 +165,17 @@ angular.module('starter.controllers', [])
 				weight += set.weight;
 				reps += set.reps;
 			}
+			// get the averages
 			weight = weight / workout.sets.length;
 			reps = reps / workout.sets.length;
 			// now we can append it to the dataset
 			data.datasets[0].data.push(weight);
 			data.datasets[1].data.push(reps);
 		} // end workout iteration
+		// reverse the array just because the fixtures are ordered wrong
+		// remove when db is up
+		data.datasets[0].data = data.datasets[0].data.reverse();
+		data.datasets[1].data = data.datasets[1].data.reverse();
 		console.log('data obj')
 		console.log(data);
 		// we want a responsive chart
