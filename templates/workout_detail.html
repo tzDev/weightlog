@@ -7,23 +7,16 @@
   </ion-header-bar>
   <ion-content>
 		<h2 style="margin: .5em;">Sets</h2>
-		<div class="list list-inset">
-			<div class="row header item"><!-- header row -->
-				<div class="col">Weight</div>
-				<div class="col">Reps</div>
-				<div class="col">Duration</div>
-			</div><!-- end header row, content repetition -->
-			<div class="row item {{ $odd ? 'odd' : 'even' }}" ng-repeat="set in workout.sets">
-				<div class="col">
-					{{ set.weight }} {{ set.units }}
-				</div>
-				<div class="col">
-					{{ set.reps }}
-				</div>
-				<div class="col">
-					{{ set.duration }}
-				</div>
-			</div><!-- end repeating div row -->
-		</div>
+		<div class="card set" ng-repeat="set in workout.sets">
+			<div class="">
+				<b>Weight: </b>{{ set.weight }} {{ set.units }}
+			</div>
+			<div class="">
+				<b>Reps: </b>{{ set.reps }}
+			</div>
+			<div class="">
+				<b>Duration: </b>{{ set.duration }}
+			</div>
+		</div><!-- end repeating div row -->
 	</ion-content>
 </ion-modal-view>
