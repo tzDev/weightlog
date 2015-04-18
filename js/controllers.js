@@ -3,56 +3,9 @@ angular.module('starter.controllers', [])
 // we will need to define an exercise service
 .factory('ExercisesService', function() {
 	var exercises = new Array();
-	// we need fixtures
-	var ex = {
-		name: "Curls", 
-		created: "2015-04-02 18:50:12", 
-		category: "Free Weights",
-		workouts: [{
-			date: "2015-04-10 12:21:09",
-			sets: [{
-				weight: 55, 
-				units: "pounds",
-				reps: 12,
-				duration: "0:58"
-			}, {
-				weight: 50, 
-				units: "pounds",
-				reps: 8,
-				duration: "0:41"	
-			}]
-		}, {
-			date: "2015-04-02 18:56:18",
-			sets: [{
-				weight: 45, 
-				units: "pounds",
-				reps: 8,
-				duration: "0:35"
-			}, {
-				weight: 45, 
-				units: "pounds",
-				reps: 10,
-				duration: "0:41"	
-			}]
-		}]
-	}; // end exercise fixture
-	var ex1 = {
-		name: "Shrugs", 
-		created: "2015-04-02 19:01:12", 
-		category: "Free Weights",
-		workouts: [{
-			date: "2015-04-02 19:05:18",
-			sets: [{
-				weight: 55, 
-				units: "pounds",
-				reps: 12,
-				duration: "0:47"
-			}]
-		}]
-	}; // end exercise fixture
-	exercises[0] = ex;
-	exercises[1] = ex1;
-	
+	storage.getbyKey('exercises', function(res) {
+		exercises = res
+	});
 	return {
 		exercises: exercises
 	}
@@ -127,6 +80,16 @@ angular.module('starter.controllers', [])
     $scope.modal.show();
   };
 	
+	// below method has a form, let's set some models
+	$scope.form_exercise = {}; // not sure how I feel about this, kinda messy
+	$scope.addExercise = function() {
+		// set some defaults
+		$scope.form_exercise.created = new Date();
+		$scope.form_exercise.workouts[0].date = new Date();
+		console.log($scope.form_exercise);
+		storage.pushtoKey('exercises', $scope.form_exercise);
+	}; // end addExercise
+	
 	$scope.buildGraph = function() {
 		// we gonn make da graf
 		// build the dataset
@@ -154,7 +117,6 @@ angular.module('starter.controllers', [])
 		//console.log(data);
 		for (workout of $scope.exercise.workouts) {
 			// first we need to set the label list name
-			console.log(workout);
 			data.labels.push(workout.date);
 			// dataset 0 is weight, 1 is reps
 			// for both sets we will want an average for that workout
@@ -175,8 +137,6 @@ angular.module('starter.controllers', [])
 		// remove when db is up
 		data.datasets[0].data = data.datasets[0].data.reverse();
 		data.datasets[1].data = data.datasets[1].data.reverse();
-		console.log('data obj')
-		console.log(data);
 		// we want a responsive chart
 		Chart.defaults.global.responsive = true;
 		// get chart el

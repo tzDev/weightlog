@@ -1,9 +1,9 @@
 <div id="exercise_info" class="list card">
 	<div class="item item-divider">
-		Exercise Name
+		Exercise Name 
 	</div>
 	<label class="item item-input">
-		<input type="text" placeholder="Exercise Name" name="exercise_name" />
+		<input type="text" placeholder="Exercise Name" name="exercise_name" ng-model="form_exercise.name" />
 	</label>
 </div>
 
@@ -12,7 +12,7 @@
 		Exercise Category
 	</div>
 	<label class="item item-radio">
-		<input type="radio" name="group">
+		<input type="radio" name="group" value="Free Weights" ng-model="form_exercise.category">
 		<div class="item-content">
 			Free Weights
 		</div>
@@ -20,7 +20,7 @@
 	</label>
 
 	<label class="item item-radio">
-		<input type="radio" name="group">
+		<input type="radio" name="group" value="Circuit" ng-model="form_exercise.category">
 		<div class="item-content">
 			Circuit
 		</div>
@@ -28,7 +28,7 @@
 	</label>
 
 	<label class="item item-radio">
-		<input type="radio" name="group">
+		<input type="radio" name="group" value="Resistance" ng-model="form_exercise.category">
 		<div class="item-content">
 			Resistance
 		</div>
@@ -41,15 +41,15 @@
 		Starting Weight (optional)
 	</div>
 	<label class="item item-input">
-		<input type="text" placeholder="Starting Weight" name="start_weight" />
+		<input type="text" placeholder="Starting Weight" name="start_weight" ng-model="form_exercise.workouts[0].sets[0].weight" />
 	</label>
 	<label class="item item-input">
-		<input type="text" placeholder="Starting Reps" name="start_Reps" />
+		<input type="text" placeholder="Starting Reps" name="start_Reps" ng-model="form_exercise.workouts[0].sets[0].reps" />
 	</label>
 </div>
 
 <div class="row responsive-sm">
-	<div class="button button-balanced" class="col" style="margin: 0 5em;">
+	<div class="button button-balanced" class="col" style="margin: 0 5em;" ng-click="addExercise();">
 		Save
 	</div>
 </div>
