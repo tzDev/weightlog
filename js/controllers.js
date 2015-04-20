@@ -3,9 +3,17 @@ angular.module('starter.controllers', [])
 // we will need to define an exercise service
 .factory('ExercisesService', function() {
 	var exercises = new Array();
-	storage.getbyKey('exercises', function(res) {
-		exercises = res
-	});
+	//storage.getbyKey('exercises', function(res) {
+	//	exercises = res
+	//});
+	this.update = function() {
+		storage.getbyKey('exercises', function(res) {
+			exercises = res
+		});
+	}
+	
+	this.update();
+	
 	return {
 		exercises: exercises
 	}
@@ -82,12 +90,15 @@ angular.module('starter.controllers', [])
 	
 	// below method has a form, let's set some models
 	$scope.form_exercise = {}; // not sure how I feel about this, kinda messy
+	$scope.form_exercise.workouts = [{sets: [{}]}]; // init fix
 	$scope.addExercise = function() {
 		// set some defaults
 		$scope.form_exercise.created = new Date();
 		$scope.form_exercise.workouts[0].date = new Date();
-		console.log($scope.form_exercise);
+		// add to local storage
 		storage.pushtoKey('exercises', $scope.form_exercise);
+		// add to service
+		ExercisesService.exercises.push($scope.form_exercise);
 	}; // end addExercise
 	
 	$scope.buildGraph = function() {
@@ -148,11 +159,32 @@ angular.module('starter.controllers', [])
 }) // end exercise controller
 
 .controller('WorkoutCtrl', function($scope) {
+	$scope.sets = [{
+		weight: null, 
+		reps: null, 
+		duaration: null
+	}];
+	
+	$scope.addSet = function() {
+		$scope.sets.push({
+			weight: null, 
+			reps: null, 
+			duration: null
+		});
+	};
+	
 	$scope.buildSetRow = function() {
 		var container = document.getElementById('sets');
 		
 		
 	} // end buildSetRow method
+	
+	$scope.form_workout = {};
+	$scope.saveWorkout = function() {
+		$scope.form_workout.sets = $scope.sets;
+		console.log('workout');
+		console.log($scope.form_workout);
+	}; // end saveWorkout method
 }) // end workout controller
 
 

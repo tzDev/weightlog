@@ -4,26 +4,26 @@
 	</div>
   <label class="item item-input">
     <span class="input-label">Date</span>
-    <input type="text" onclick="this.type='date';" />
+    <input type="text" onclick="this.type='date';" ng-model="form_workout.date" />
   </label>
 	
 	 <label class="item item-input">
     <span class="input-label">Time</span>
-    <input type="text" />
+    <input type="text" ng-model="form_workout.time" />
   </label>
 </div>
 
 <div id="sets" class="list card">
-	<div class="item item-divider">
+	<div class="item item-divider" ng-click="addSet()">
 		Sets
 	</div>
-	<div ng-include src="'templates/_set_form.html'">
+	<div ng-include src="'templates/_set_form.html'" ng-repeat="set in sets">
 		<!-- sets included here -->
 	</div>
 </div>
 
 <div class="row responsive-sm">
-	<div class="button button-balanced" class="col" style="margin: 0 5em;">
+	<div class="button button-balanced" class="col" style="margin: 0 5em;" ng-click="saveWorkout()">
 		Save
 	</div>
 </div>

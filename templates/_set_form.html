@@ -1,14 +1,14 @@
 <label class="item item-input">
 	<span class="input-label">Weight</span>
-	<input type="text" name="weight" />
+	<input type="text" name="weight[{{$index}}]" ng-model="set.weight" />
 </label>
 
 <label class="item item-input">
 	<span class="input-label">Reps</span>
-	<input type="text" name="Reps" />
+	<input type="text" name="reps[{{$index}}]" ng-model="set.reps" />
 </label>
 
 <label class="item item-input">
 	<span class="input-label">Duration</span>
-	<input type="text" name="duration" />
+	<input type="text" name="duration[{{$index}}]" ng-model="set.duration" />
 </label>
