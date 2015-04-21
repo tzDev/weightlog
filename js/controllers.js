@@ -1,23 +1,59 @@
 angular.module('starter.controllers', [])
 
 // we will need to define an exercise service
-.factory('ExercisesService', function() {
-	var exercises = new Array();
-	//storage.getbyKey('exercises', function(res) {
-	//	exercises = res
-	//});
-	this.update = function() {
+.service('ExercisesService', function() {
+	var exercises = [];
+
+	var update = function() {
 		storage.getbyKey('exercises', function(res) {
 			exercises = res
 		});
 	}
+	update();
 	
-	this.update();
+	var getById = function(id) {
+		for (ex of this.exercises) {
+			//console.log(ex);
+			if (ex.id == id)
+				return ex;
+			else 
+				return false;
+		}
+	} // end getByid method
+	
+	var addExercise = function(ex) {
+		// see if exercises is defined
+		if (!this.exercises)
+			this.exercises = [];
+		// make an id for it 
+		ex.id = storage.mkID(ex.created_date);
+		this.exercises.push(ex);
+		storage.setKey('exercises', this.exercises);
+		console.log(this.exercises);
+		this.update();
+	} // end addWorkoutToExercise method
 	
 	return {
+		getById: getById,
+		addExercise: addExercise,
+		update: update,
 		exercises: exercises
 	}
 }) // end exercise service
+
+.service('WorkoutService', function() {
+	var workouts = [];
+	
+	var addWorkout = function(exercise, workout) {
+		exercise.workouts.push(workout);
+	} // end addWorkout method
+	
+	
+	return {
+		addWorkout: addWorkout,
+		workouts: workouts
+	}
+}) // end workoutservice
 
 
 // now some controllers
@@ -74,7 +110,7 @@ angular.module('starter.controllers', [])
 	$scope.exercise = {};
 	$scope.workout = {};
 	$scope.loadExercise = function() {
-		$scope.exercise = ExercisesService.exercises[$stateParams.exercise_id];
+		$scope.exercise = ExercisesService.getById($stateParams.exercise_id);
 		$scope.buildGraph();
 	} // end loadWorkout method
 	// modal control methods
@@ -91,14 +127,13 @@ angular.module('starter.controllers', [])
 	// below method has a form, let's set some models
 	$scope.form_exercise = {}; // not sure how I feel about this, kinda messy
 	$scope.form_exercise.workouts = [{sets: [{}]}]; // init fix
+	//$scope.form_exercise.id = ExercisesService.exercises.length + 1;
 	$scope.addExercise = function() {
 		// set some defaults
 		$scope.form_exercise.created = new Date();
 		$scope.form_exercise.workouts[0].date = new Date();
 		// add to local storage
-		storage.pushtoKey('exercises', $scope.form_exercise);
-		// add to service
-		ExercisesService.exercises.push($scope.form_exercise);
+		ExercisesService.addExercise($scope.form_exercise);
 	}; // end addExercise
 	
 	$scope.buildGraph = function() {
@@ -158,11 +193,11 @@ angular.module('starter.controllers', [])
 	
 }) // end exercise controller
 
-.controller('WorkoutCtrl', function($scope) {
+.controller('WorkoutCtrl', function($scope, $stateParams, WorkoutService, ExercisesService) {
 	$scope.sets = [{
 		weight: null, 
 		reps: null, 
-		duaration: null
+		duration: null
 	}];
 	
 	$scope.addSet = function() {
@@ -182,8 +217,10 @@ angular.module('starter.controllers', [])
 	$scope.form_workout = {};
 	$scope.saveWorkout = function() {
 		$scope.form_workout.sets = $scope.sets;
-		console.log('workout');
-		console.log($scope.form_workout);
+		// get the exercise
+		var ex = ExercisesService.getById($stateParams.exercise_id);
+		//ex.workouts.push($scope.form_workout);
+		WorkoutService.addWorkout(ex, $scope.form_workout);
 	}; // end saveWorkout method
 }) // end workout controller
 

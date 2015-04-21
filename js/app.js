@@ -80,7 +80,7 @@ angular.module('starter', ['ionic', 'starter.controllers'])
 	})
 	
 	.state('app.add-workout', {
-		url: "/workouts/add",
+		url: "/workouts/add/:exercise_id", // exercise is its parent
 		views: {
 			'menuContent': {
 				templateUrl: "templates/add_workout.html",
