@@ -37,7 +37,25 @@ angular.module('starter.controllers', [])
 		
 		updateExercises: function(exercises) {
 			console.log(storage.setKey('exercises', angular.toJson(exercises)));
-		} // end updateExercises method
+		}, // end updateExercises method
+		
+		updateExercise: function(exercise) {
+			// take the exercise object and replace the corresponding object 
+			// in the keystore with this new updated one
+			console.log('updateExercise');
+			console.log(exercise.id);
+			var exercises = this.getExercises();
+			for (ex of exercises) {
+				if (ex.id == exercise.id)	{
+					// we found the match, let's replace it
+					//ex = exercise;
+					angular.copy(exercise, ex);
+				}
+			}
+			// now our exercises list should have the data we want
+			// update the key 
+			this.updateExercises(exercises);
+		} // end updateExercise method
 		
 	}; // end return object
 }) // end exercise service
@@ -240,8 +258,13 @@ angular.module('starter.controllers', [])
 	} // end showEdit method
 	
 	$scope.saveSet = function() {
-		console.log('updated scope set');
-		console.log($scope.sets); // works
+		// update the current workout to include this set
+		$scope.workout.sets = $scope.sets;
+		//console.log('scope.exercise.workouts');
+		//console.log($scope.exercise.workouts);
+		//console.log('new exercise:');
+		//console.log($scope.exercise);
+		ExercisesService.updateExercise($scope.exercise);
 	}; // end saveSet method
 	
 	$scope.form_workout = {};
