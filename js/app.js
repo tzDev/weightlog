@@ -86,7 +86,7 @@ angular.module('starter', ['ionic', 'starter.controllers'])
 		views: {
 			'menuContent': {
 				templateUrl: "templates/add_workout.html",
-				controller: 'WorkoutCtrl'
+				controller: 'ExerciseCtrl'
 			}
 		}
 	})

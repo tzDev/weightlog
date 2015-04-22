@@ -9,9 +9,7 @@ storage = {
 		if (window.localStorage[key]) {
 			return window.localStorage.getItem(key);
 		} else {
-			return {
-				status: "invalid key"
-			};
+			return "invalid key";
 		}
 	}, // end getByKey method
 	

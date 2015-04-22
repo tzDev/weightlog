@@ -1,0 +1,13 @@
+<ion-modal-view>
+  <ion-header-bar>
+    <h1 class="title">Edit Set</h1>
+    <div class="buttons">
+      <button class="button button-clear" ng-click="edit_set.hide()">Close</button>
+    </div>
+  </ion-header-bar>
+  <ion-content>
+		<!-- do it -->
+		<span ng-repeat="set in sets" ng-include src="'templates/_set_form.html'"></span>
+		
+	</ion-content>
+</ion-modal-view>

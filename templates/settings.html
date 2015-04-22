@@ -1,5 +1,24 @@
-<ion-view view-title="Settings" ng-init="ExercisesService.h()">
+<ion-view view-title="Settings" ng-init="">
   <ion-content>
-  	settings
+		<div class="list">
+			<!-- units -->
+			<label class="item item-input item-select">
+				<div class="input-label">
+					Units
+				</div>
+				<select>
+					<option>Pounds</option>
+					<option>Kilograms</option>
+				</select>
+			</label>
+			<!-- export -->
+			<div class="item">
+				Export workout data
+			</div>
+			<!-- clear all -->
+			<div class="item">
+				Clear workout data
+			</div>
+		</div>
 	</ion-content>
 </ion-view>

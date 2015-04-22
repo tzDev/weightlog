@@ -5,7 +5,15 @@ angular.module('starter.controllers', [])
 	// do it 
 	return {
 		getExercises: function () {
-			return angular.fromJson(storage.getbyKey('exercises'));
+			var req;
+			req = angular.fromJson(storage.getbyKey('exercises'));
+			if (req == 'invalid key') {
+				// probably first run
+				storage.setKey('exercises', null);
+				return false;
+			}
+			// if we get our exercises return them, req will simply be the list
+			return req;
 		}, // end getExercises method
 		
 		getById: function (id) {
@@ -107,12 +115,21 @@ angular.module('starter.controllers', [])
 	
 }) // end Exercise cotnroller
 
-.controller('ExerciseCtrl', function($scope, $ionicModal, $stateParams, $location, ExercisesService) {
+.controller('ExerciseCtrl', function($scope, $ionicModal, $stateParams, $location, ExercisesService, WorkoutService) {
+	//  some modal preloading
 	$ionicModal.fromTemplateUrl('templates/workout_detail.html', {
     scope: $scope
   }).then(function(modal) {
     $scope.modal = modal;
   });
+	
+	$ionicModal.fromTemplateUrl('templates/edit_set.html', {
+    scope: $scope
+  }).then(function(modal) {
+    $scope.edit_set = modal;
+  });
+	
+	// now the two big m's, models and methods
 	$scope.exercise = {};
 	$scope.workout = {};
 	$scope.loadExercise = function() {
@@ -140,6 +157,10 @@ angular.module('starter.controllers', [])
 		$scope.form_exercise.workouts[0].date = new Date();
 		// add to local storage
 		ExercisesService.addExercise($scope.form_exercise);
+		// lets clean this up since we are repeating ourselves
+		$scope.form_exercise = {}; // not sure how I feel about this, kinda messy
+		$scope.form_exercise.workouts = [{sets: [{}]}]; // init fix
+		// redirect the user
 		$location.url("/exercises");
 	}; // end addExercise
 	
@@ -194,11 +215,10 @@ angular.module('starter.controllers', [])
 		var ctx = document.getElementById("linechart").getContext("2d");
 		// print it
 		var chart = new Chart(ctx).Line(data, {});
+		console.log('chart data');
+		console.log(data);
 	}; // end buildGraph method
 	
-}) // end exercise controller
-
-.controller('WorkoutCtrl', function($scope, $stateParams, WorkoutService, ExercisesService) {
 	$scope.sets = [{
 		weight: null, 
 		reps: null, 
@@ -213,11 +233,15 @@ angular.module('starter.controllers', [])
 		});
 	};
 	
-	$scope.buildSetRow = function() {
-		var container = document.getElementById('sets');
-		
-		
-	} // end buildSetRow method
+	$scope.showEditSet = function(set_id) {
+		$scope.edit_set.show();
+		var current_set = $scope.workout.sets[set_id];
+		$scope.sets = [current_set];
+	} // end showEdit method
+	
+	$scope.saveSet = function() {
+
+	}; // end saveSet method
 	
 	$scope.form_workout = {};
 	$scope.saveWorkout = function() {
@@ -227,7 +251,8 @@ angular.module('starter.controllers', [])
 		//ex.workouts.push($scope.form_workout);
 		WorkoutService.addWorkout(ex, $scope.form_workout);
 	}; // end saveWorkout method
-}) // end workout controller
+	
+}) // end exercise controller
 
 	
 
