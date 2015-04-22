@@ -7,7 +7,12 @@
   </ion-header-bar>
   <ion-content>
 		<!-- do it -->
-		<span ng-repeat="set in sets" ng-include src="'templates/_set_form.html'"></span>
-		
+		<div class="list list-inset" ng-repeat="set in sets" ng-include src="'templates/_set_form.html'"></div>
+		<br />
+		<div class="row responsive-sm">
+			<div class="button button-balanced" class="col" style="margin: 0 5em;" ng-click="saveSet();">
+				Save
+			</div>
+		</div>
 	</ion-content>
 </ion-modal-view>

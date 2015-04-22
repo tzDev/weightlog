@@ -240,7 +240,8 @@ angular.module('starter.controllers', [])
 	} // end showEdit method
 	
 	$scope.saveSet = function() {
-
+		console.log('updated scope set');
+		console.log($scope.sets); // works
 	}; // end saveSet method
 	
 	$scope.form_workout = {};
