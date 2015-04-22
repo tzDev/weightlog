@@ -3,11 +3,11 @@ var storage = storage || {};
 
 storage = {
 	
-	getbyKey: function (key, success_cb) {
+	getbyKey: function (key) {
 		"use strict";
 		// get the key, jsonify it 
 		if (window.localStorage[key]) {
-			success_cb(JSON.parse(window.localStorage[key]));
+			return window.localStorage.getItem(key);
 		} else {
 			return {
 				status: "invalid key"
@@ -32,7 +32,8 @@ storage = {
 	
 	setKey: function (key, obj) {
 		"use strict";
-		window.localStorage[key] = JSON.stringify(obj);
+		window.localStorage[key] = obj;
+		return "key set";
 	}, // end setKey method
 	
 	mkID: function (string) {

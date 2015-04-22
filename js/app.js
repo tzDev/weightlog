@@ -18,6 +18,8 @@ angular.module('starter', ['ionic', 'starter.controllers'])
       StatusBar.styleDefault();
     }
   });
+	
+	
 })
 
 .config(function($stateProvider, $urlRouterProvider) {
@@ -93,7 +95,12 @@ angular.module('starter', ['ionic', 'starter.controllers'])
 	;
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/app/exercises');
+	
+
+
 });
+
+
 
 
 

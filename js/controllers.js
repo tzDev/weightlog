@@ -2,57 +2,57 @@ angular.module('starter.controllers', [])
 
 // we will need to define an exercise service
 .service('ExercisesService', function() {
-	var exercises = [];
-
-	var update = function() {
-		storage.getbyKey('exercises', function(res) {
-			exercises = res
-		});
-	}
-	update();
-	
-	var getById = function(id) {
-		for (ex of this.exercises) {
-			//console.log(ex);
-			if (ex.id == id)
-				return ex;
-			else 
-				return false;
-		}
-	} // end getByid method
-	
-	var addExercise = function(ex) {
-		// see if exercises is defined
-		if (!this.exercises)
-			this.exercises = [];
-		// make an id for it 
-		ex.id = storage.mkID(ex.created_date);
-		this.exercises.push(ex);
-		storage.setKey('exercises', this.exercises);
-		console.log(this.exercises);
-		this.update();
-	} // end addWorkoutToExercise method
-	
+	// do it 
 	return {
-		getById: getById,
-		addExercise: addExercise,
-		update: update,
-		exercises: exercises
-	}
+		getExercises: function () {
+			return angular.fromJson(storage.getbyKey('exercises'));
+		}, // end getExercises method
+		
+		getById: function (id) {
+			var exercises = this.getExercises();
+			for (ex of exercises) {
+				if (ex.id == id)
+					return ex;
+				else {
+					//return false;
+				}
+			} // end for
+		}, // end getById method
+		
+		addExercise: function (exercise) {
+			// generate an id for it
+			exercise.id = storage.mkID(exercise.created_date + exercise.name);
+			var exercises = this.getExercises() || [];
+			exercises.push(exercise);
+			console.log(storage.setKey('exercises', angular.toJson(exercises)));
+		}, // end addExercise method
+		
+		updateExercises: function(exercises) {
+			console.log(storage.setKey('exercises', angular.toJson(exercises)));
+		} // end updateExercises method
+		
+	}; // end return object
 }) // end exercise service
 
-.service('WorkoutService', function() {
+.service('WorkoutService', function(ExercisesService, $location) {
 	var workouts = [];
 	
 	var addWorkout = function(exercise, workout) {
-		exercise.workouts.push(workout);
+		var exercises = ExercisesService.getExercises();
+		for (ex of exercises) {
+			if (ex.id == exercise.id) {
+				ex.workouts.push(workout);	
+			}
+		} 
+		ExercisesService.updateExercises(exercises);
+		$location.url('/exercise/' + exercise.id);
 	} // end addWorkout method
 	
 	
 	return {
 		addWorkout: addWorkout,
 		workouts: workouts
-	}
+	};
 }) // end workoutservice
 
 
@@ -94,14 +94,20 @@ angular.module('starter.controllers', [])
 
 }) // end Settings controller
 
-.controller('ExercisesCtrl', function($scope, $ionicModal, ExercisesService) {
-	$scope.exercises = {};
+.controller('ExercisesCtrl', function($scope, $ionicModal, $rootScope, ExercisesService) {
+	//$scope.exercises = {};
 	$scope.getExercises = function() {
-		$scope.exercises = ExercisesService.exercises;
+		$scope.exercises = ExercisesService.getExercises();
 	}	// end getExercises function
+	
+	$rootScope.$on('$locationChangeSuccess', function () { // not my favorite but it works
+		console.log('statechanged');
+		$scope.exercises = ExercisesService.getExercises();
+	})
+	
 }) // end Exercise cotnroller
 
-.controller('ExerciseCtrl', function($scope, $ionicModal, $stateParams, ExercisesService) {
+.controller('ExerciseCtrl', function($scope, $ionicModal, $stateParams, $location, ExercisesService) {
 	$ionicModal.fromTemplateUrl('templates/workout_detail.html', {
     scope: $scope
   }).then(function(modal) {
@@ -134,6 +140,7 @@ angular.module('starter.controllers', [])
 		$scope.form_exercise.workouts[0].date = new Date();
 		// add to local storage
 		ExercisesService.addExercise($scope.form_exercise);
+		$location.url("/exercises");
 	}; // end addExercise
 	
 	$scope.buildGraph = function() {
@@ -181,8 +188,6 @@ angular.module('starter.controllers', [])
 		} // end workout iteration
 		// reverse the array just because the fixtures are ordered wrong
 		// remove when db is up
-		data.datasets[0].data = data.datasets[0].data.reverse();
-		data.datasets[1].data = data.datasets[1].data.reverse();
 		// we want a responsive chart
 		Chart.defaults.global.responsive = true;
 		// get chart el
@@ -223,7 +228,6 @@ angular.module('starter.controllers', [])
 		WorkoutService.addWorkout(ex, $scope.form_workout);
 	}; // end saveWorkout method
 }) // end workout controller
-
 
 	
 
