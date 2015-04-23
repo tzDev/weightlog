@@ -60,7 +60,7 @@ angular.module('starter.controllers', [])
 	}; // end return object
 }) // end exercise service
 
-.service('WorkoutService', function(ExercisesService, $location) {
+.service('WorkoutService', function(ExercisesService, $location, DatetimeService) {
 	var workouts = [];
 	
 	var addWorkout = function(exercise, workout) {
@@ -70,6 +70,8 @@ angular.module('starter.controllers', [])
 				ex.workouts.push(workout);	
 			}
 		} 
+		workout.date = DatetimeService.formatDate(workout.date);
+		workout.time = DatetimeService.formatTime(workout.time);
 		ExercisesService.updateExercises(exercises);
 		$location.url('/exercise/' + exercise.id);
 	} // end addWorkout method
@@ -81,6 +83,20 @@ angular.module('starter.controllers', [])
 	};
 }) // end workoutservice
 
+.service('DatetimeService', function($filter){
+	return {
+		//Format our date into Apr-04-2014
+		formatDate: function(inputDate) {
+			var dateProper = $filter('date')(inputDate, 'MMM dd yyyy');
+			return dateProper;
+		},
+		//Format our time into -------
+		formatTime: function(inputTime){
+			var timeProper = $filter('time')(inputTime, 'H:mma');
+			return timeProper;
+		}
+	};
+})// end DateTimeService
 
 // now some controllers
 .controller('AppCtrl', function($scope, $ionicModal, $timeout) {
@@ -133,7 +149,7 @@ angular.module('starter.controllers', [])
 	
 }) // end Exercise cotnroller
 
-.controller('ExerciseCtrl', function($scope, $ionicModal, $stateParams, $location, ExercisesService, WorkoutService) {
+.controller('ExerciseCtrl', function($scope, $ionicModal, $stateParams, $location, ExercisesService, WorkoutService, DatetimeService) {
 	//  some modal preloading
 	$ionicModal.fromTemplateUrl('templates/workout_detail.html', {
     scope: $scope
@@ -172,7 +188,8 @@ angular.module('starter.controllers', [])
 	$scope.addExercise = function() {
 		// set some defaults
 		$scope.form_exercise.created = new Date();
-		$scope.form_exercise.workouts[0].date = new Date();
+		$scope.form_exercise.workouts[0].date = DatetimeService.formatDate(new Date());
+		console.log(DatetimeService.formatDate(new Date()));
 		// add to local storage
 		ExercisesService.addExercise($scope.form_exercise);
 		// lets clean this up since we are repeating ourselves
@@ -273,6 +290,8 @@ angular.module('starter.controllers', [])
 		// get the exercise
 		var ex = ExercisesService.getById($stateParams.exercise_id);
 		//ex.workouts.push($scope.form_workout);
+		DatetimeService.formatDate($scope.form_workout.date);
+		DatetimeService.formatTime($scope.form_workout.time);
 		WorkoutService.addWorkout(ex, $scope.form_workout);
 	}; // end saveWorkout method
 	
