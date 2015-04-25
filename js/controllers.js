@@ -254,15 +254,13 @@ angular.module('starter.controllers', [])
 	
 	$scope.sets = [{
 		weight: null, 
-		reps: null, 
-		duration: null
+		reps: null
 	}];
 	
 	$scope.addSet = function() {
 		$scope.sets.push({
 			weight: null, 
-			reps: null, 
-			duration: null
+			reps: null
 		});
 	};
 	
