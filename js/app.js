@@ -91,6 +91,16 @@ angular.module('starter', ['ionic', 'starter.controllers'])
 		}
 	})
 	
+	.state('app.add-set', {
+		url: "/sets/add/:workout_id", // workout is its parent
+		views: {
+			'menuContent': {
+				templateUrl: "templates/add_set.html",
+				controller: 'ExerciseCtrl'
+			}
+		}
+	})
+	
 
 	;
   // if none of the above states are matched, use this as the fallback

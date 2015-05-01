@@ -186,6 +186,12 @@ angular.module('starter.controllers', [])
     $scope.edit_set = modal;
   });
 	
+	$ionicModal.fromTemplateUrl('templates/add_set.html', {
+    scope: $scope
+  }).then(function(modal) {
+    $scope.add_set = modal;
+  });
+	
 	// now the two big m's, models and methods
 	$scope.exercise = {};
 	$scope.workout = {};
@@ -193,6 +199,8 @@ angular.module('starter.controllers', [])
 	$scope.loadExercise = function() {
 		$scope.ds = DatetimeService; // need that
 		$scope.exercise = ExercisesService.getById($stateParams.exercise_id);
+		console.log('got scope.exercise');
+		console.log($scope.exercise);
 		$scope.buildGraph();
 	} // end loadWorkout method
 	// modal control methods
@@ -214,6 +222,8 @@ angular.module('starter.controllers', [])
 		// set some defaults
 		$scope.form_exercise.created = new Date();
 		$scope.form_exercise.workouts[0].date = DatetimeService.formatDate(new Date());
+		// give it an id
+		$scope.form_exercise.workouts[0].id = storage.mkID($scope.form_exercise.workouts[0].date);
 		// add to local storage
 		ExercisesService.addExercise($scope.form_exercise);
 		// lets clean this up since we are repeating ourselves
@@ -260,10 +270,7 @@ angular.module('starter.controllers', [])
 				reps += parseInt(set.reps);
 			}
 			// get the averages
-			console.log(weight);
 			weight = weight / workout.sets.length;
-			console.log(workout.sets.length);
-			console.log(weight);
 			reps = reps / workout.sets.length;
 			// now we can append it to the dataset
 			data.datasets[0].data.push(weight);
@@ -299,14 +306,28 @@ angular.module('starter.controllers', [])
 		$scope.sets = [current_set];
 	} // end showEdit method
 	
-	$scope.saveSet = function() {
+	$scope.saveSet = function(workout_id) {
 		// update the current workout to include this set
-		$scope.workout.sets = $scope.sets;
+		if (workout_id) {
+			// it's an addset, push $scope.sets[0] to current workout scope
+			for (workout of $scope.exercise.workouts) {
+				if (workout.id == workout_id) {
+					//workout.sets.push($scope.sets[0])
+					for (set of $scope.sets) {
+						workout.sets.push(set);	
+					}
+				}
+			}
+		}
+		console.log('scope.xercises');
+		console.log($scope.exercise);
 		ExercisesService.updateExercise($scope.exercise);
 	}; // end saveSet method
 	
 	$scope.form_workout = {};
 	$scope.saveWorkout = function() {
+		// let's give it an id
+		$scope.form_workout.id = storage.mkID($scope.form_workout.date + $scope.form_workout.time);
 		$scope.form_workout.sets = $scope.sets;
 		// set the units 
 		$scope.form_workout.units = Units.currentUnits();
@@ -314,7 +335,7 @@ angular.module('starter.controllers', [])
 		var ex = ExercisesService.getById($stateParams.exercise_id);
 		//ex.workouts.push($scope.form_workout);
 		//ex.date = $scope.form_workout.date + " " + $scope.form_workout.time;
-		WorkoutService.addWorkout(ex, $scope.form_workout);
+		WorkoutService.addWorkout(ex, $scope.form_workout); 
 	}; // end saveWorkout method
 	
 }) // end exercise controller

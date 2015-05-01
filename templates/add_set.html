@@ -1,0 +1,19 @@
+<ion-modal-view>
+  <ion-header-bar>
+    <h1 class="title">Add Set</h1>
+    <div class="buttons">
+      <button class="button button-clear" ng-click="add_set.hide()">Close</button>
+    </div>
+  </ion-header-bar>
+  <ion-content>
+		<div ng-include src="'templates/_set_form.html'" ng-repeat="set in sets">
+			<!-- sets included here -->
+		</div>
+		<br />
+		<div class="row responsive-sm">
+			<div class="button button-balanced" class="col" style="margin: 0 5em;" ng-click="saveSet(workout.id)">
+				Save
+			</div>
+		</div>
+	</ion-content>
+</ion-modal-view>
