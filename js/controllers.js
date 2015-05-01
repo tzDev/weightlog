@@ -5,15 +5,15 @@ angular.module('starter.controllers', [])
 	// do it 
 	return {
 		getExercises: function () {
-			var req;
-			req = angular.fromJson(storage.getbyKey('exercises'));
+			var req = storage.getbyKey('exercises');
 			if (req == 'invalid key') {
 				// probably first run
-				storage.setKey('exercises', null);
+				storage.setKey('exercises', "[]");
+				storage.setKey('exercise_units', 'Pounds');
 				return false;
 			}
 			// if we get our exercises return them, req will simply be the list
-			return req;
+			return angular.fromJson(req);
 		}, // end getExercises method
 		
 		getById: function (id) {
@@ -158,10 +158,6 @@ angular.module('starter.controllers', [])
     }, 1000);
   };
 }) // end AppCtrl
-
-.controller('SettingsCtrl', function($scope) {
-
-}) // end Settings controller
 
 .controller('ExercisesCtrl', function($scope, $ionicModal, $rootScope, ExercisesService) {
 	//$scope.exercises = {};
@@ -322,8 +318,9 @@ angular.module('starter.controllers', [])
 	
 }) // end exercise controller
 
-.controller('SettingsCtrl', function($scope) {
+.controller('SettingsCtrl', function($scope, Units) {
 	$scope.preferences = {};
+	$scope.preferences.units = Units.currentUnits(); // init dropdown setting
 	
 	$scope.setUnits = function() {
 		var units = $scope.preferences.units;
