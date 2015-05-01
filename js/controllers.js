@@ -256,11 +256,14 @@ angular.module('starter.controllers', [])
 			var weight = 0;
 			var reps = 0;
 			for (set of workout.sets) {
-				weight += Units.printWeight(set.weight, workout.units);
-				reps += set.reps;
+				weight += parseInt(set.weight);
+				reps += parseInt(set.reps);
 			}
 			// get the averages
+			console.log(weight);
 			weight = weight / workout.sets.length;
+			console.log(workout.sets.length);
+			console.log(weight);
 			reps = reps / workout.sets.length;
 			// now we can append it to the dataset
 			data.datasets[0].data.push(weight);
@@ -280,15 +283,13 @@ angular.module('starter.controllers', [])
 	
 	$scope.sets = [{
 		weight: null, 
-		reps: null, 
-		duration: null
+		reps: null
 	}];
 	
 	$scope.addSet = function() {
 		$scope.sets.push({
 			weight: null, 
-			reps: null, 
-			duration: null
+			reps: null
 		});
 	};
 	
