@@ -1,6 +1,6 @@
 <ion-modal-view>
   <ion-header-bar>
-    <h1 class="title">{{ exercise.name }} {{ exercise.created }}</h1>
+    <h1 class="title">{{ ds.formatDate(exercise.created) }}</h1>
     <div class="buttons">
       <button class="button button-clear" ng-click="closeWorkout()">Close</button>
     </div>

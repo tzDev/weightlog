@@ -6,7 +6,7 @@
 				<div class="input-label">
 					Units
 				</div>
-				<select>
+				<select ng-model="preferences.units" ng-change="setUnits()">
 					<option>Pounds</option>
 					<option>Kilograms</option>
 				</select>

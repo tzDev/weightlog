@@ -1,6 +1,6 @@
 <div class="card set" ng-repeat="set in workout.sets" ng-click="showEditSet($index)">
 	<div class="">
-		<b>Weight: </b>{{ set.weight }} {{ set.units }}
+		<b>Weight: </b>{{ uf.printWeight(set.weight, workout.units) }} {{ uf.currentUnits() }}
 	</div>
 	<div class="">
 		<b>Reps: </b>{{ set.reps }}

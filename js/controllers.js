@@ -86,13 +86,44 @@ angular.module('starter.controllers', [])
 	return {
 		//Format our date into Apr-04-2014
 		formatDate: function(in_date) {
-			console.log('in date');
-			console.log(in_date);
 			var date_proper = $filter('date')(new Date(in_date), 'MMM dd yyyy H:mm a');
 			return date_proper;
 		}
 	};
 })// end DateTimeService
+
+.factory('Units', function() {
+	return {
+		lbtoKg: function(lbs) {
+			return parseInt(lbs) * 0.454;
+		}, // end lbtoKg method
+		kgtoLbs: function(kg) {
+			return parseInt(kg) * 2.2;
+		}, // end kgtoLbs method
+		
+		printWeight: function(weight, units) {
+			if (this.currentUnits() == 'Pounds') {
+				// pounds 
+				if (units == 'Pounds') 
+					return weight; // nothing to be done
+				else 
+					return this.lbtoKg(weight);
+			}
+			else {
+				// kilos	
+				if (units == 'Kilograms')
+					return weight; //nothing to be done
+				else 
+					return this.kgtoLbs(weight);
+			}
+		}, // end printWeight
+	
+		currentUnits: function() {
+			return storage.getbyKey('exercise_units');
+		} // end currentUnits method
+	}
+}) // end unit factory
+
 
 // now some controllers
 .controller('AppCtrl', function($scope, $ionicModal, $timeout) {
@@ -145,7 +176,7 @@ angular.module('starter.controllers', [])
 	
 }) // end Exercise cotnroller
 
-.controller('ExerciseCtrl', function($scope, $ionicModal, $stateParams, $location, ExercisesService, WorkoutService, DatetimeService) {
+.controller('ExerciseCtrl', function($scope, $ionicModal, $stateParams, $location, ExercisesService, WorkoutService, DatetimeService, Units) {
 	//  some modal preloading
 	$ionicModal.fromTemplateUrl('templates/workout_detail.html', {
     scope: $scope
@@ -162,7 +193,9 @@ angular.module('starter.controllers', [])
 	// now the two big m's, models and methods
 	$scope.exercise = {};
 	$scope.workout = {};
+	$scope.uf = Units; // scope the units factory
 	$scope.loadExercise = function() {
+		$scope.ds = DatetimeService; // need that
 		$scope.exercise = ExercisesService.getById($stateParams.exercise_id);
 		$scope.buildGraph();
 	} // end loadWorkout method
@@ -179,7 +212,7 @@ angular.module('starter.controllers', [])
 	
 	// below method has a form, let's set some models
 	$scope.form_exercise = {}; // not sure how I feel about this, kinda messy
-	$scope.form_exercise.workouts = [{sets: [{}]}]; // init fix
+	$scope.form_exercise.workouts = [{units: Units.currentUnits(), sets: [{}]}]; // init fix
 	//$scope.form_exercise.id = ExercisesService.exercises.length + 1;
 	$scope.addExercise = function() {
 		// set some defaults
@@ -189,7 +222,7 @@ angular.module('starter.controllers', [])
 		ExercisesService.addExercise($scope.form_exercise);
 		// lets clean this up since we are repeating ourselves
 		$scope.form_exercise = {}; // not sure how I feel about this, kinda messy
-		$scope.form_exercise.workouts = [{sets: [{}]}]; // init fix
+		$scope.form_exercise.workouts = [{units: Units.currentUnits(), sets: [{}]}]; // init fix
 		// redirect the user
 		$location.url("/exercises");
 	}; // end addExercise
@@ -227,7 +260,7 @@ angular.module('starter.controllers', [])
 			var weight = 0;
 			var reps = 0;
 			for (set of workout.sets) {
-				weight += set.weight;
+				weight += Units.printWeight(set.weight, workout.units);
 				reps += set.reps;
 			}
 			// get the averages
@@ -278,6 +311,8 @@ angular.module('starter.controllers', [])
 	$scope.form_workout = {};
 	$scope.saveWorkout = function() {
 		$scope.form_workout.sets = $scope.sets;
+		// set the units 
+		$scope.form_workout.units = Units.currentUnits();
 		// get the exercise
 		var ex = ExercisesService.getById($stateParams.exercise_id);
 		//ex.workouts.push($scope.form_workout);
@@ -286,6 +321,16 @@ angular.module('starter.controllers', [])
 	}; // end saveWorkout method
 	
 }) // end exercise controller
+
+.controller('SettingsCtrl', function($scope) {
+	$scope.preferences = {};
+	
+	$scope.setUnits = function() {
+		var units = $scope.preferences.units;
+		storage.setKey('exercise_units', units)
+	} 
+	
+}) // end settingsController
 
 	
 
