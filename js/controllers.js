@@ -256,7 +256,7 @@ angular.module('starter.controllers', [])
 			var weight = 0;
 			var reps = 0;
 			for (set of workout.sets) {
-				weight += parseInt(set.weight);
+				weight += parseInt(Units.printWeight(set.weight, workout.units));
 				reps += parseInt(set.reps);
 			}
 			// get the averages
