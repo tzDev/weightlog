@@ -63,7 +63,18 @@ angular.module('starter.controllers', [])
 			// now our exercises list should have the data we want
 			// update the key 
 			this.updateExercises(exercises);
-		} // end updateExercise method
+		}, // end updateExercise method
+		
+		deleteExercise: function(exercise_id) {
+			var exercises = this.getExercises();
+			for (var i = 0; i < exercises.length; i++) {
+				if (exercises[i].id == exercise_id) {
+					exercises.remove(i);	
+				}
+			}
+			this.updateExercises(exercises);
+		} // end deleteExercise method
+		
 		
 	}; // end return object
 }) // end exercise service
@@ -178,6 +189,11 @@ angular.module('starter.controllers', [])
 	$scope.toggleDelete = function() {
 		$scope.show_delete = ($scope.show_delete) ? false : true;
 	} // end toggleDelete
+	
+	$scope.deleteExercise = function(exercise_id) {
+		// remove the exercise from memory and localstorage by id
+		ExercisesService.deleteExercise(exercise_id);
+	}
 	
 	$rootScope.$on('$locationChangeSuccess', function () { // not my favorite but it works
 		console.log('statechanged');
