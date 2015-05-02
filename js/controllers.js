@@ -169,9 +169,15 @@ angular.module('starter.controllers', [])
 
 .controller('ExercisesCtrl', function($scope, $ionicModal, $rootScope, ExercisesService) {
 	//$scope.exercises = {};
+	$scope.show_delete = false;
+	
 	$scope.getExercises = function() {
 		$scope.exercises = ExercisesService.getExercises();
 	}	// end getExercises function
+	
+	$scope.toggleDelete = function() {
+		$scope.show_delete = ($scope.show_delete) ? false : true;
+	} // end toggleDelete
 	
 	$rootScope.$on('$locationChangeSuccess', function () { // not my favorite but it works
 		console.log('statechanged');

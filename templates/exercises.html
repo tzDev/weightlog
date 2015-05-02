@@ -1,7 +1,8 @@
 <ion-view view-title="My Exercises" ng-init="getExercises()">
   <ion-content>
-  	<ion-list>
-			<ion-item ng-repeat="exercise in exercises" ng-href="#/app/exercise/{{exercise.id}}">
+  	<ion-list show-delete="show_delete">
+			<ion-item ng-repeat="exercise in exercises" ng-href="#/app/exercise/{{exercise.id}}" on-hold="toggleDelete()">
+				<ion-delete-button class="ion-minus-circled"></ion-delete-button>
 				{{ exercise.name }}
 				<p style="float: right;">
 					{{ exercise.category }}
