@@ -91,7 +91,7 @@ angular.module('starter.controllers', [])
 			}
 		} 
 		ExercisesService.updateExercises(exercises);
-		$location.url('/exercise/' + exercise.id);
+		window.history.back();
 	} // end addWorkout method
 	
 	
