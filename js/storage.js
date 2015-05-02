@@ -41,10 +41,42 @@ storage = {
 		} else {
 			return "CryptoJS not found";
 		}
-	} // end mkID method
+	}, // end mkID method
 	
-	
-	
+	sorbyDate: function (list, date_key) {
+		"use strict";
+		var i;
+		// first check the date keys
+		for (i = 0; i < list.length; i += 1) {
+			if (!list[i][date_key] instanceof Date) {
+				// try and convert it
+				try {
+					list[i][date_key] = new Date(list[i][date_key]);
+				} catch (e) {
+					// we could not make a date out of it, no point tryint to sort
+					return "failed to sort: " + e;
+				} // end try/catch 
+			} // end if
+		} // end date checking
+		// if we make it out then we know our date keys are all valid
+		list.sort(function (a, b) {
+			// define the comparison
+			return new Date(b[date_key]).getTime() - new Date(a[date_key]).getTime();
+		});
+		return list;
+	} // end sortbyDate method
 	
 }; // end storage object
+
+
+
+
+
+
+
+
+
+
+
+
 

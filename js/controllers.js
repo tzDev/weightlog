@@ -9,11 +9,19 @@ angular.module('starter.controllers', [])
 			if (req == 'invalid key') {
 				// probably first run
 				storage.setKey('exercises', "[]");
-				storage.setKey('exercise_units', 'Pounds');
+				storage.setKey('exercise_units', 'Pounds'); // default to pounds
 				return false;
 			}
 			// if we get our exercises return them, req will simply be the list
-			return angular.fromJson(req);
+			var exercises = angular.fromJson(req);
+			// sort the exercises by date
+			exercises = storage.sorbyDate(exercises, 'created');
+			// now go through each and sort the workouts by date
+			for (e of exercises) {
+				storage.sorbyDate(e.workouts, 'date');
+			}
+			// now exercises is a nice list of date sorted objects
+			return exercises;
 		}, // end getExercises method
 		
 		getById: function (id) {
@@ -258,6 +266,7 @@ angular.module('starter.controllers', [])
 			data: []							
 		}]
 		//console.log(data);
+		$scope.exercise.workouts.reverse(); // graph needs first dates to be first
 		for (workout of $scope.exercise.workouts) {
 			// first we need to set the label list name
 			data.labels.push(workout.date);
@@ -276,7 +285,6 @@ angular.module('starter.controllers', [])
 			data.datasets[0].data.push(weight);
 			data.datasets[1].data.push(reps);
 		} // end workout iteration
-		// reverse the array just because the fixtures are ordered wrong
 		// remove when db is up
 		// we want a responsive chart
 		Chart.defaults.global.responsive = true;
@@ -286,6 +294,7 @@ angular.module('starter.controllers', [])
 		var chart = new Chart(ctx).Line(data, {});
 		console.log('chart data');
 		console.log(data);
+		$scope.exercise.workouts.reverse();
 	}; // end buildGraph method
 	
 	$scope.sets = [{
@@ -315,13 +324,16 @@ angular.module('starter.controllers', [])
 					//workout.sets.push($scope.sets[0])
 					for (set of $scope.sets) {
 						workout.sets.push(set);	
-					}
-				}
-			}
+					} // end append sets
+				} 
+			} // end find matching workout, this needs to be a findByID method
 		}
-		console.log('scope.xercises');
-		console.log($scope.exercise);
 		ExercisesService.updateExercise($scope.exercise);
+		// clear scope set 
+		$scope.sets = [{
+			weight: null, 
+			reps: null
+		}];
 	}; // end saveSet method
 	
 	$scope.form_workout = {};
