@@ -381,7 +381,11 @@ angular.module('starter.controllers', [])
 	$scope.setUnits = function() {
 		var units = $scope.preferences.units;
 		storage.setKey('exercise_units', units)
-	} 
+	} // end setUnits method
+	
+	$scope.exportWorkoutData = function() {
+		console.log(localStorage.exercises);
+	} // end exportWorkoutData method
 	
 }) // end settingsController
 
