@@ -91,13 +91,30 @@ angular.module('starter.controllers', [])
 			}
 		} 
 		ExercisesService.updateExercises(exercises);
-		window.history.back();
+		window.history.back(); // simply go back to the list 
 	} // end addWorkout method
 	
+	var deleteWorkout = function(parent_exercise, workout_id) {
+		// remove by id
+		var exercises = ExercisesService.getExercises();
+		for (var i = 0; i < exercises.length; i++) {
+			if (exercises[i].id == parent_exercise.id) {
+				for (var j = 0; j < exercises[i].workouts.length; j++) {
+					if (exercises[i].workouts[j].id == workout_id) {
+						exercises[i].workouts.remove(j);
+						console.log('after remove');
+						console.log(exercises[i].workouts);
+					}
+				} // end workout iteration
+			}
+		} // end find workout by id loop
+		ExercisesService.updateExercises(exercises);
+	} // end deleteWorkout method
 	
 	return {
 		addWorkout: addWorkout,
-		workouts: workouts
+		workouts: workouts,
+		deleteWorkout: deleteWorkout
 	};
 }) // end workoutservice
 
@@ -226,6 +243,8 @@ angular.module('starter.controllers', [])
 	$scope.exercise = {};
 	$scope.workout = {};
 	$scope.uf = Units; // scope the units factory
+	$scope.workout_show_delete = false;
+	
 	$scope.loadExercise = function() {
 		$scope.ds = DatetimeService; // need that
 		$scope.exercise = ExercisesService.getById($stateParams.exercise_id);
@@ -371,6 +390,14 @@ angular.module('starter.controllers', [])
 		//ex.date = $scope.form_workout.date + " " + $scope.form_workout.time;
 		WorkoutService.addWorkout(ex, $scope.form_workout); 
 	}; // end saveWorkout method
+	
+	$scope.deleteWorkout = function(workout_id) {
+		WorkoutService.deleteWorkout($scope.exercise, workout_id);
+	}
+	
+	$scope.toggleWorkoutDelete = function() {
+		$scope.workout_show_delete = ($scope.workout_show_delete) ? false : true;
+	} // end toggleDelete
 	
 }) // end exercise controller
 

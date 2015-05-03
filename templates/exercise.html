@@ -12,8 +12,9 @@
 			</div>
 		</div>
 		<div class="workouts_list">
-			<ion-list>
-				<ion-item ng-repeat="workout in exercise.workouts" ng-click="showWorkout($index)";>
+			<ion-list show-delete="workout_show_delete">
+				<ion-item ng-repeat="workout in exercise.workouts" ng-click="showWorkout($index)" on-hold="toggleWorkoutDelete()">
+					<ion-delete-button class="ion-minus-circled" ng-click="deleteWorkout(workout.id)"></ion-delete-button>
 					{{ workout.date }}
 				</ion-item>
 			</ion-list>
