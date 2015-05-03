@@ -124,9 +124,19 @@ angular.module('starter.controllers', [])
 		formatDate: function(in_date) {
 			var date_proper = $filter('date')(new Date(in_date), 'MMM dd yyyy H:mm a');
 			return date_proper;
-		}
+		}, 
 	};
 })// end DateTimeService
+
+.filter('epoch', function() {
+	return function(epoch_time) {
+		// first convert it to hours 
+		var time = (parseInt(epoch_time) / (60 * 60)).toString();
+		// now get the decimal 
+		var minutes = (time.indexOf('.') != -1) ? Math.round((parseFloat(time.substr(time.indexOf('.'))) * .6) * 100) : '00';
+		return (time.indexOf('.') != -1) ? time.substr(0, time.indexOf('.')) + ":" + minutes : time + ":" + minutes;
+	}
+}) // end epoch filter
 
 .factory('Units', function() {
 	return {
@@ -376,7 +386,8 @@ angular.module('starter.controllers', [])
 			reps: null
 		}];
 	}; // end saveSet method
-	
+
+	$scope.slots = {epochTime: 12600, format: 12, step: 15};	
 	$scope.form_workout = {};
 	$scope.saveWorkout = function() {
 		// let's give it an id

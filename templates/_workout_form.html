@@ -9,7 +9,12 @@
 	
 	 <label class="item item-input">
     <span class="input-label">Time</span>
-    <input type="text" ng-model="form_workout.time" />
+    <!--<input type="text" ng-model="form_workout.time" />-->
+		<ionic-timepicker etime="slots.epochTime" format="slots.format" step="slots.step">    
+    	<button class="button button-block button-positive">
+				<strong etime="slots.epochTime" class="ng-binding">{{ slots.epochTime | epoch }}</strong>
+			</button>
+		</ionic-timepicker>
   </label>
 </div>
 
